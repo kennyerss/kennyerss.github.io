@@ -6,29 +6,28 @@ class LogisticRegression:
     # From Convexity Lecture Notes
     def sigmoid(self, z):
         '''
-        Input:
-        Output:
+        Input: Some vector z 
+        Output: Returns the sigmoid of z 
         '''
         return 1 / (1 + np.exp(-z))
 
     # From Convexity Lecture Notes
     def empirical_risk(self, X, y):
         '''
-        Input:
-        Output:
+        Input: Feature matrix X and true label vector y
+        Output: Returns the average of the loss between X and y
         '''
         return self.loss(X, y).mean()
     
     def gradient_empirical(self, X, y):
         '''
-        Returns the gradient of the empirical risk loss
+        Input: Feature matrix X and true label vector y
+        Output: Returns the gradient of the empirical risk loss
         '''
         y_hat = self.predict(X)
         loss_deriv = self.loss_deriv(X, y)
         matrix_loss_deriv = loss_deriv[:, np.newaxis]
     
-        # print(matrix_loss_deriv.shape)
-        # print(X.shape)
         return (matrix_loss_deriv * X).mean(axis = 0)
     
     def pad(self, X):
@@ -40,8 +39,8 @@ class LogisticRegression:
         
     def fit(self, X, y, alpha, max_epochs):
         '''
-        Input: Feature matrix X and true label vector y
-        Output: None
+        Input: Feature matrix X, true label vector y, learning rate alpha, and max epochs
+        Output: Normal gradient descent model trained on data set
         '''
         # Transform feature matrix X with extra column
         X_ = self.pad(X)
@@ -54,25 +53,74 @@ class LogisticRegression:
         prev_loss = np.inf # Set initial loss to infinity
         
         # From Gradient notes
-        for _ in range(max_epochs):
-            # print("Running time: " + str(_))
+        for j in range(max_epochs):
             # For each step, compute the gradient of the current weight vector
             gradient = self.gradient_empirical(X_, y)
             # Update weight vector 
             self.w -= gradient * alpha
             
-            # Calculate our loss after updated weight vector
+            # Calculate our score and append to score history
+            score = self.score(X_, y)
+            self.score_history.append(score)
+            
+            # Calculate our loss after updated weight vector and append to loss history
             new_loss = self.empirical_risk(X_, y)
-            # Append to our loss history
-            self.loss_history.append(new_loss)
             
             # Check if new_loss is the same as prev_loss
             if np.allclose(new_loss, prev_loss):
-                print("Loss are the same")
+                self.loss_history.append(new_loss)
                 break
             else:
+                self.loss_history.append(new_loss)
                 prev_loss = new_loss
-        print("Max epochs reached")
+        
+    def fit_stochastic(self, X, y, alpha, max_epochs, batch_size, momentum = False):
+        '''
+        Input: Feature matrix X, true label vector y, learning rate alpha, max epochs, and momentum
+        Output: Stochastic gradient model trained on data set with momentum
+        '''
+         # If momentum is set true, set beta value to 0.8
+        beta = 0.8 if momentum else 0
+
+        # From assignment post
+        # Transform feature matrix X with extra column
+        X_ = self.pad(X)
+        
+        n = X_.shape[0]
+            
+        # Initalize class instance variables: weights vector, loss and score history 
+        initial_w = np.random.rand(X_.shape[1])
+        self.w = initial_w
+        self.loss_history = []
+        prev_loss = np.inf
+        
+        for j in np.arange(max_epochs):
+            # Reshuffling our subset of points
+            order = np.arange(n)
+            np.random.shuffle(order)
+            
+            # Create batch size to generate a subset of our feature matrix
+            for batch in np.array_split(order, n // batch_size + 1):
+                x_batch = X_[batch,:]
+                y_batch = y[batch]
+                gradient = self.gradient_empirical(x_batch, y_batch) 
+                
+                # Update weight vector using momentum
+                curr_w = self.w
+                next_w = curr_w - gradient * alpha + (beta * (self.w - initial_w))
+                self.w = next_w
+                initial_w = curr_w
+                
+            # At the end of epoch, we calculate and update loss history
+            new_loss = self.empirical_risk(X_, y)
+                
+            # Terminate if found no difference between prev and new loss
+            if np.allclose(new_loss, prev_loss):
+                self.loss_history.append(new_loss)
+                break
+            else:
+                self.loss_history.append(new_loss)
+                prev_loss = new_loss
         
     def predict(self, X):
         '''
@@ -88,7 +136,9 @@ class LogisticRegression:
         '''
         # Generate our y_hat value using predict function
         y_hat = self.predict(X)
-        return (y == y_hat).mean() # Returns the accuracy of predictions as the mean of the comparison between y and y_
+        # Take the predicted y_hat and convert the vector to 1s and 0s
+        y_hat_comp = 1*(y_hat > 0)
+        return (y == y_hat_comp).mean() # Returns the accuracy of predictions as the mean of the comparison between y and y_
     
     # From Convexity lecture notes
     def loss(self, X, y):
@@ -101,7 +151,8 @@ class LogisticRegression:
     
     def loss_deriv(self, X, y):
         '''
-        Takes the derivative of our little loss function with respect to y_hat
+        Input: Feature matrix X and true label vector y
+        Output: Returns the derivative of little loss function with respect to predicted y_hat
         '''
         y_hat = self.predict(X)
         return self.sigmoid(y_hat) - y

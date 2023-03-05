@@ -230,7 +230,7 @@ background-size: cover;
 <section id="linearly-separable-data" class="level3">
 <h3 class="anchored" data-anchor-id="linearly-separable-data">Linearly Separable Data</h3>
 <p>Here is an experiment using a linearly separable data demonstrating the convergence towards an accuracy of 1 with the Perceptron algorithm. First, we can randomize a linearly separable data and visualize the plot.</p>
-<div class="cell" data-execution_count="46">
+<div class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>load_ext autoreload</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>autoreload <span class="dv">2</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -251,41 +251,37 @@ background-size: cover;
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.scatter(X[:,<span class="dv">0</span>], X[:,<span class="dv">1</span>], c <span class="op">=</span> y)</span>
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>xlab <span class="op">=</span> plt.xlabel(<span class="st">"Feature 1"</span>)</span>
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>ylab <span class="op">=</span> plt.ylabel(<span class="st">"Feature 2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>The autoreload extension is already loaded. To reload it, use:
-  %reload_ext autoreload</code></pre>
-</div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-2-output-2.png" class="img-fluid"></p>
+<p><img src="index_files/figure-html/cell-2-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>Then, we can fit the Perceptron onto its data and plot its accuracy evolution up until the algorithm has met an accuracy of 1.</p>
-<div class="cell" data-execution_count="63">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">12345</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> Perceptron()</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>p.fit(X, y, max_steps <span class="op">=</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">12345</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> Perceptron()</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>p.fit(X, y, max_steps <span class="op">=</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="64">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.plot(p.history)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>xlab <span class="op">=</span> plt.xlabel(<span class="st">"Iteration"</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>ylab <span class="op">=</span> plt.ylabel(<span class="st">"Accuracy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.plot(p.history)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>xlab <span class="op">=</span> plt.xlabel(<span class="st">"Iteration"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>ylab <span class="op">=</span> plt.ylabel(<span class="st">"Accuracy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="index_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>As shown above, the Perceptron has reached an accuracy of 1 just around ~650 iterations. Hence, we can plot the separating line and should discover that the line separates each point to its corresponding label.</p>
-<div class="cell" data-execution_count="49">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> draw_line(w, x_min, x_max):</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> np.linspace(x_min, x_max, <span class="dv">101</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  y <span class="op">=</span> <span class="op">-</span>(w[<span class="dv">0</span>]<span class="op">*</span>x <span class="op">+</span> w[<span class="dv">2</span>])<span class="op">/</span>w[<span class="dv">1</span>]</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  plt.plot(x, y, color <span class="op">=</span> <span class="st">"black"</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.scatter(X[:,<span class="dv">0</span>], X[:,<span class="dv">1</span>], c <span class="op">=</span> y)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> draw_line(p.w, <span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>xlab <span class="op">=</span> plt.xlabel(<span class="st">"Feature 1"</span>)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>ylab <span class="op">=</span> plt.ylabel(<span class="st">"Feature 2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> draw_line(w, x_min, x_max):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> np.linspace(x_min, x_max, <span class="dv">101</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  y <span class="op">=</span> <span class="op">-</span>(w[<span class="dv">0</span>]<span class="op">*</span>x <span class="op">+</span> w[<span class="dv">2</span>])<span class="op">/</span>w[<span class="dv">1</span>]</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  plt.plot(x, y, color <span class="op">=</span> <span class="st">"black"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.scatter(X[:,<span class="dv">0</span>], X[:,<span class="dv">1</span>], c <span class="op">=</span> y)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> draw_line(p.w, <span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>xlab <span class="op">=</span> plt.xlabel(<span class="st">"Feature 1"</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>ylab <span class="op">=</span> plt.ylabel(<span class="st">"Feature 2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="index_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
 </div>
@@ -294,35 +290,35 @@ background-size: cover;
 <section id="non-linearly-separable-data" class="level3">
 <h3 class="anchored" data-anchor-id="non-linearly-separable-data">Non-linearly Separable Data</h3>
 <p>For data that is non-linearly separable, we should discover that the Perceptron will not converge to perfect accuracy, but instead, the Perceptron will terminate until max iterations has reached. Below, we will produce and visualize data that is non-linearly separable.</p>
-<div class="cell" data-execution_count="70">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_circles</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_circles(n_samples<span class="op">=</span> <span class="dv">100</span>, factor<span class="op">=</span><span class="fl">0.3</span>, noise<span class="op">=</span><span class="fl">0.05</span>, random_state<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.scatter(X[:,<span class="dv">0</span>], X[:,<span class="dv">1</span>], c <span class="op">=</span> y)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>xlab <span class="op">=</span> plt.xlabel(<span class="st">"Feature 1"</span>)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>ylab <span class="op">=</span> plt.ylabel(<span class="st">"Feature 2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_circles</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_circles(n_samples<span class="op">=</span> <span class="dv">100</span>, factor<span class="op">=</span><span class="fl">0.3</span>, noise<span class="op">=</span><span class="fl">0.05</span>, random_state<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.scatter(X[:,<span class="dv">0</span>], X[:,<span class="dv">1</span>], c <span class="op">=</span> y)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>xlab <span class="op">=</span> plt.xlabel(<span class="st">"Feature 1"</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>ylab <span class="op">=</span> plt.ylabel(<span class="st">"Feature 2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="index_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>Then, similarly to the previous experiment, we can fit the Perceptron onto the data and plot the accuracy of its evolution.</p>
-<div class="cell" data-execution_count="71">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> Perceptron()</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>p.fit(X, y, max_steps <span class="op">=</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> Perceptron()</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>p.fit(X, y, max_steps <span class="op">=</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="72">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Printing the last 10 values of the Perceptron history</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(p.history[<span class="op">-</span><span class="dv">10</span>:])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Printing the last 10 values of the Perceptron history</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(p.history[<span class="op">-</span><span class="dv">10</span>:])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[0.42, 0.58, 0.58, 0.58, 0.58, 0.58, 0.58, 0.32, 0.5, 0.35]</code></pre>
+<pre><code>[0.62, 0.62, 0.62, 0.51, 0.51, 0.5, 0.5, 0.54, 0.54, 0.54]</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="73">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting the Perceptron's score history</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.plot(p.history)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>xlab <span class="op">=</span> plt.xlabel(<span class="st">"Iteration"</span>)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>ylab <span class="op">=</span> plt.ylabel(<span class="st">"Accuracy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting the Perceptron's score history</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.plot(p.history)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>xlab <span class="op">=</span> plt.xlabel(<span class="st">"Iteration"</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>ylab <span class="op">=</span> plt.ylabel(<span class="st">"Accuracy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="index_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
 </div>
@@ -332,22 +328,22 @@ background-size: cover;
 <section id="the-perceptron-in-n-features" class="level3">
 <h3 class="anchored" data-anchor-id="the-perceptron-in-n-features">The Perceptron in N-Features</h3>
 <p>Now, we can experiment on the Perceptron for a set of data with at least 5 features.</p>
-<div class="cell" data-execution_count="74">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>p_features <span class="op">=</span> <span class="dv">6</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create data that is at least 5 features</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_blobs(n_samples <span class="op">=</span> <span class="dv">100</span>, n_features <span class="op">=</span> p_features <span class="op">-</span> <span class="dv">1</span>, centers <span class="op">=</span> [(<span class="op">-</span><span class="fl">1.7</span>, <span class="op">-</span><span class="fl">1.7</span>), (<span class="fl">1.7</span>, <span class="fl">1.7</span>)])</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit our Perceptron onto the data </span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> Perceptron()</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>p.fit(X, y, max_steps <span class="op">=</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>p_features <span class="op">=</span> <span class="dv">6</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create data that is at least 5 features</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_blobs(n_samples <span class="op">=</span> <span class="dv">100</span>, n_features <span class="op">=</span> p_features <span class="op">-</span> <span class="dv">1</span>, centers <span class="op">=</span> [(<span class="op">-</span><span class="fl">1.7</span>, <span class="op">-</span><span class="fl">1.7</span>), (<span class="fl">1.7</span>, <span class="fl">1.7</span>)])</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit our Perceptron onto the data </span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> Perceptron()</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>p.fit(X, y, max_steps <span class="op">=</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="75">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize our Perceptron's accuracy evolution</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.plot(p.history)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>xlab <span class="op">=</span> plt.xlabel(<span class="st">"Iteration"</span>)</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>ylab <span class="op">=</span> plt.ylabel(<span class="st">"Accuracy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize our Perceptron's accuracy evolution</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.plot(p.history)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>xlab <span class="op">=</span> plt.xlabel(<span class="st">"Iteration"</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>ylab <span class="op">=</span> plt.ylabel(<span class="st">"Accuracy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="index_files/figure-html/cell-11-output-1.png" class="img-fluid"></p>
 </div>
