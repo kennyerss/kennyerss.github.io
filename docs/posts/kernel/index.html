@@ -256,7 +256,7 @@ background-size: cover;
 </section>
 <section id="choosing-gamma" class="level2">
 <h2 class="anchored" data-anchor-id="choosing-gamma">Choosing gamma</h2>
-<p>In the experiment above, I’ve tested my implementation of kernel logistic regression choosing a small <code>gamma</code> value of <span class="math inline">\(0.1\)</span>. However, what if I decide to use a gamma value significantly larger than <span class="math inline">\(0.1\)</span>. For this experiment, let’s compare trained models with a small gamma, and let the larger gamma value be <span class="math inline">\(10000\)</span>, and see what happens.</p>
+<p>In the experiment above, I’ve tested my implementation of kernel logistic regression choosing a small <code>gamma</code> value of <span class="math inline">\(0.1\)</span>. However, what if I decide to use a gamma value significantly larger than <span class="math inline">\(0.1\)</span>? For this experiment, let’s compare trained models with a small gamma. Let the larger gamma value be <span class="math inline">\(10000\)</span>, and let’s see what happens.</p>
 <p>Shown below is some randomly generated nonlinear data of features. For this experiment, I’ve fixed the <code>noise</code> of the data to be <span class="math inline">\(0.222\)</span>.</p>
 <div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_moons, make_circles</span>
