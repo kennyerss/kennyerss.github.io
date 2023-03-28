@@ -622,11 +622,11 @@ Validation score = 0.4931</code></pre>
 <span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>plt.bar(br3, lasso_validation_3, width <span class="op">=</span> bar_width,</span>
 <span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'alpha = 0.1'</span>)</span>
 <span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Number of p_features vs Validation Scores for Lasso Regularization with Varying Alpha'</span>)</span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Number of p_features vs Validation Score for Lasso Regularization with Varying Alpha Degrees'</span>)</span>
 <span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding Xticks</span></span>
 <span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Number of p_features'</span>, fontsize <span class="op">=</span> <span class="dv">12</span>)</span>
-<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Score'</span>, fontsize <span class="op">=</span> <span class="dv">12</span>)</span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Validation Score'</span>, fontsize <span class="op">=</span> <span class="dv">12</span>)</span>
 <span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>plt.xticks([r <span class="op">+</span> <span class="fl">0.1</span> <span class="cf">for</span> r <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(lasso_validation))],</span>
 <span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a>        [<span class="st">'10'</span>, <span class="st">'50'</span>, <span class="st">'n_train - 1'</span>])</span>
 <span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a></span>
