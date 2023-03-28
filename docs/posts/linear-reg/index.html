@@ -453,7 +453,7 @@ Validation score = 0.4931</code></pre>
 <span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>L1_validation_3 <span class="op">=</span> L1.score(X_val, y_val)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>After fitting the Lasso model with an alpha of <span class="math inline">\(0.001\)</span>, we can plot its validation scores in contrast to the standard linear regression.</p>
-<div class="cell" data-execution_count="19">
+<div class="cell" data-execution_count="33">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>bar_width <span class="op">=</span> <span class="fl">0.2</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>lasso_validation <span class="op">=</span> [L1_validation_1, L1_validation_2, L1_validation_3]</span>
@@ -465,15 +465,15 @@ Validation score = 0.4931</code></pre>
 <span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Make the plot</span></span>
 <span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>plt.bar(br2, linear_validation, width <span class="op">=</span> bar_width,</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'linear validation score'</span>)</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'standard linear regression'</span>)</span>
 <span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>plt.bar(br1, lasso_validation, width <span class="op">=</span> bar_width,</span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'lasso validation score'</span>)</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'lasso regularization'</span>)</span>
 <span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Number of p_features vs Validation Scores for Lasso Regularization and Standard Linear Regression'</span>)</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Number of p_features vs Validation Score for Lasso Regularization and Standard Linear Regression'</span>)</span>
 <span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding Xticks</span></span>
 <span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Number of p_features'</span>, fontsize <span class="op">=</span> <span class="dv">12</span>)</span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Score'</span>, fontsize <span class="op">=</span> <span class="dv">12</span>)</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Validation Score'</span>, fontsize <span class="op">=</span> <span class="dv">12</span>)</span>
 <span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>plt.xticks([r <span class="op">+</span> <span class="fl">0.1</span> <span class="cf">for</span> r <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(lasso_validation))],</span>
 <span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>        [<span class="st">'10'</span>, <span class="st">'50'</span>, <span class="st">'n_train - 1'</span>])</span>
 <span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a></span>
@@ -512,7 +512,7 @@ Validation score = 0.4931</code></pre>
 <span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>L2_validation_3 <span class="op">=</span> L2.score(X_val, y_val)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>After fitting the Lasso model with an alpha of <span class="math inline">\(0.01\)</span>, we can plot its validation scores in contrast to the standard linear regression.</p>
-<div class="cell" data-execution_count="24">
+<div class="cell" data-execution_count="34">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>bar_width <span class="op">=</span> <span class="fl">0.2</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>lasso_validation <span class="op">=</span> [L2_validation_1, L2_validation_2, L2_validation_3]</span>
@@ -524,15 +524,15 @@ Validation score = 0.4931</code></pre>
 <span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Make the plot</span></span>
 <span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>plt.bar(br2, linear_validation, width <span class="op">=</span> bar_width,</span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'linear validation score'</span>)</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'standard linear regression'</span>)</span>
 <span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>plt.bar(br1, lasso_validation, width <span class="op">=</span> bar_width,</span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'lasso validation score'</span>)</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'lasso regularization score'</span>)</span>
 <span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Number of p_features vs Validation Scores for Lasso Regularization and Standard Linear Regression'</span>)</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Number of p_features vs Validation Score for Lasso Regularization and Standard Linear Regression'</span>)</span>
 <span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding Xticks</span></span>
 <span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Number of p_features'</span>, fontsize <span class="op">=</span> <span class="dv">12</span>)</span>
-<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Score'</span>, fontsize <span class="op">=</span> <span class="dv">12</span>)</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Validation Score'</span>, fontsize <span class="op">=</span> <span class="dv">12</span>)</span>
 <span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>plt.xticks([r <span class="op">+</span> <span class="fl">0.1</span> <span class="cf">for</span> r <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(lasso_validation))],</span>
 <span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>        [<span class="st">'10'</span>, <span class="st">'50'</span>, <span class="st">'n_train - 1'</span>])</span>
 <span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a></span>
@@ -571,7 +571,7 @@ Validation score = 0.4931</code></pre>
 <span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>L3_validation_3 <span class="op">=</span> L3.score(X_val, y_val)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>After fitting the Lasso model with an alpha of <span class="math inline">\(0.1\)</span>, we can plot its validation scores in contrast to the standard linear regression.</p>
-<div class="cell" data-execution_count="29">
+<div class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>bar_width <span class="op">=</span> <span class="fl">0.2</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>lasso_validation <span class="op">=</span> [L3_validation_1, L3_validation_2, L3_validation_3]</span>
@@ -583,15 +583,15 @@ Validation score = 0.4931</code></pre>
 <span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Make the plot</span></span>
 <span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>plt.bar(br2, linear_validation, width <span class="op">=</span> bar_width,</span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'linear validation score'</span>)</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'standard linear regression'</span>)</span>
 <span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>plt.bar(br1, lasso_validation, width <span class="op">=</span> bar_width,</span>
-<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'lasso validation score'</span>)</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'lasso regularization'</span>)</span>
 <span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Number of p_features vs Validation Scores for Lasso Regularization and Standard Linear Regression'</span>)</span>
 <span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding Xticks</span></span>
 <span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Number of p_features'</span>, fontsize <span class="op">=</span> <span class="dv">12</span>)</span>
-<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Score'</span>, fontsize <span class="op">=</span> <span class="dv">12</span>)</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Validation Score'</span>, fontsize <span class="op">=</span> <span class="dv">12</span>)</span>
 <span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>plt.xticks([r <span class="op">+</span> <span class="fl">0.1</span> <span class="cf">for</span> r <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(lasso_validation))],</span>
 <span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>        [<span class="st">'10'</span>, <span class="st">'50'</span>, <span class="st">'n_train - 1'</span>])</span>
 <span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a></span>
