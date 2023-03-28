@@ -32,7 +32,7 @@ class LinearRegression:
         q = transpose_X @ y
 
         for _ in range(max_iter):
-            # Compute our gradient 
+            # Compute our gradient and update weight vector
             gradient = np.subtract((P @ self.w), q)
             self.w -= gradient * alpha
             
@@ -65,16 +65,3 @@ class LinearRegression:
         bottom_sum = np.sum((y_mean - y)**2)
 
         return 1 - (top_sum / bottom_sum) # Coefficient of determination
-    
-    # Function to generate linear regression data
-    def LR_data(self, n_train = 100, n_val = 100, p_features = 1, noise = .1, w = None):
-        if w is None: 
-            w = np.random.rand(p_features + 1) + .2
-
-        X_train = np.random.rand(n_train, p_features)
-        y_train = self.pad(X_train)@w + noise*np.random.randn(n_train)
-
-        X_val = np.random.rand(n_val, p_features)
-        y_val = self.pad(X_val)@w + noise*np.random.randn(n_val)
-
-        return X_train, y_train, X_val, y_val

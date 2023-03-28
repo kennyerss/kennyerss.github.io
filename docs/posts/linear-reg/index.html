@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Kent Canonigo">
+<meta name="dcterms.date" content="2023-03-27">
+<meta name="description" content="This is my implementation for the least-squares linear regression with several experimentations utilizing LASSO regularization.">
 
-<title>My Awesome CSCI 0451 Blog – index</title>
+<title>My Awesome CSCI 0451 Blog - Implementing Linear Regression</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +23,69 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -66,6 +132,7 @@ background-size: cover;
     }
     </style>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -106,7 +173,39 @@ background-size: cover;
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Implementing Linear Regression</h1>
+                  <div>
+        <div class="description">
+          This is my implementation for the least-squares linear regression with several experimentations utilizing LASSO regularization.
+        </div>
+      </div>
+                </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Kent Canonigo </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">March 27, 2023</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     
@@ -116,7 +215,433 @@ background-size: cover;
 
 
 
+<section id="linear-regression-implementation" class="level1">
+<h1>Linear Regression Implementation</h1>
+<p>Here is the link to my source code: <a href="https://github.com/kennyerss/kennyerss.github.io/blob/main/posts/linear-reg/linear.py">Linear Regression</a></p>
+<section id="least-squares-linear-regression" class="level2">
+<h2 class="anchored" data-anchor-id="least-squares-linear-regression">Least-Squares Linear Regression</h2>
+<p>For this blog post, I’ve implemented least-squares linear regression in two ways: using the analytical method and an efficient gradient descent.</p>
+<section id="analytical-method" class="level3">
+<h3 class="anchored" data-anchor-id="analytical-method">Analytical Method</h3>
+<p>The analytical method is derived from solving the equation: <span class="math display">\[0 = X^{T}(X \hat{w} - y)\]</span></p>
+<p>where <span class="math inline">\(X\)</span> is our paddded feature matrix. By setting the gradient equal to <span class="math inline">\(0\)</span>, we can solve for <span class="math inline">\(\hat{w}\)</span> to get an explicit solution for the optimized weight vector. Solving this equation requires <span class="math inline">\(X\)</span> to be an invertible matrix such that it has at least many rows as columns. Thus, our final solution for <span class="math inline">\(\hat{w}\)</span> is</p>
+<p><span class="math display">\[\hat{w} = (X^{T}X)^{-1} X^{T}y\]</span></p>
+<p>In my <code>fit_analytic</code> method, I utilized numpy’s linalg transpose and inverse methods alongside orderly matrix multiplications to calculate the optimized weight vector <span class="math inline">\(\hat{w}\)</span>.</p>
+</section>
+<section id="efficient-gradient-descent" class="level3">
+<h3 class="anchored" data-anchor-id="efficient-gradient-descent">Efficient Gradient Descent</h3>
+<p>To implement an efficient gradient descent for least-squares linear regression, instead of computing the original gradient equation at each iteration of an epoch:</p>
+<p><span class="math display">\[\nabla{L(w)} = X^{T}(Xw - y)\]</span></p>
+<p>I calculated <code>once</code> <span class="math inline">\(P = X^{T}X\)</span> and <span class="math inline">\(q = X^{T}y\)</span> to reduce the time complexity of the matrix mutliplication of <span class="math inline">\(X^{T}X\)</span> being <span class="math inline">\(O(np^2)\)</span> and <span class="math inline">\(X^{T}y\)</span> being <span class="math inline">\(O(np)\)</span>. Thus, reducing the gradient equation to be:</p>
+<p><span class="math display">\[\nabla{L(w)} = Pw - q\]</span></p>
+<p>reduces the time complexity of calculating the gradient to be <span class="math inline">\(O(p^2)\)</span> steps which is significantly faster! In my <code>fit_gradient</code> method, I first initialized some random weight vector of <span class="math inline">\(p\)</span> shape as my padded <span class="math inline">\(X\)</span> feature matrix. Then, I computed <span class="math inline">\(P\)</span> and <span class="math inline">\(q\)</span> which I used inside my for-loop to update my weight vector <span class="math inline">\(self.w\)</span> with the gradient. At each epoch, I calculated the <code>score</code> of the current weight vector and appended the current score to <code>score_history</code>.</p>
+</section>
+</section>
+</section>
+<section id="experiments" class="level1">
+<h1>Experiments</h1>
+<section id="demonstration" class="level2">
+<h2 class="anchored" data-anchor-id="demonstration">Demonstration</h2>
+<p>Shown below, I’ve generated a set of data using the <code>LR_data</code> method in my <code>LinearRegression</code> class. Then, I fit the data using both analytic and gradient descent methods and should expect a similar optimized weight vector <span class="math inline">\(w\)</span>.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> linear <span class="im">import</span> LinearRegression </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>LR <span class="op">=</span> LinearRegression()</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pad(X):</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.append(X, np.ones((X.shape[<span class="dv">0</span>], <span class="dv">1</span>)), <span class="dv">1</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> LR_data(n_train <span class="op">=</span> <span class="dv">100</span>, n_val <span class="op">=</span> <span class="dv">100</span>, p_features <span class="op">=</span> <span class="dv">1</span>, noise <span class="op">=</span> <span class="fl">.1</span>, w <span class="op">=</span> <span class="va">None</span>):</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> w <span class="kw">is</span> <span class="va">None</span>: </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        w <span class="op">=</span> np.random.rand(p_features <span class="op">+</span> <span class="dv">1</span>) <span class="op">+</span> <span class="fl">.2</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    X_train <span class="op">=</span> np.random.rand(n_train, p_features)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    y_train <span class="op">=</span> pad(X_train)<span class="op">@</span>w <span class="op">+</span> noise<span class="op">*</span>np.random.randn(n_train)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    X_val <span class="op">=</span> np.random.rand(n_val, p_features)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    y_val <span class="op">=</span> pad(X_val)<span class="op">@</span>w <span class="op">+</span> noise<span class="op">*</span>np.random.randn(n_val)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> X_train, y_train, X_val, y_val</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>n_train <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>n_val <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>p_features <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>noise <span class="op">=</span> <span class="fl">0.2</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># create some data</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>X_train, y_train, X_val, y_val <span class="op">=</span> LR_data(n_train, n_val, p_features, noise)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># plot it</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>fig, axarr <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, sharex <span class="op">=</span> <span class="va">True</span>, sharey <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>axarr[<span class="dv">0</span>].scatter(X_train, y_train)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>axarr[<span class="dv">1</span>].scatter(X_val, y_val)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>labs <span class="op">=</span> axarr[<span class="dv">0</span>].<span class="bu">set</span>(title <span class="op">=</span> <span class="st">"Training"</span>, xlabel <span class="op">=</span> <span class="st">"x"</span>, ylabel <span class="op">=</span> <span class="st">"y"</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>labs <span class="op">=</span> axarr[<span class="dv">1</span>].<span class="bu">set</span>(title <span class="op">=</span> <span class="st">"Validation"</span>, xlabel <span class="op">=</span> <span class="st">"x"</span>)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-3-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>LR.fit_analytic(X_train, y_train) </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> LR.w</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Training score = </span><span class="sc">{</span>LR<span class="sc">.</span>score(X_train, y_train, w)<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Validation score = </span><span class="sc">{</span>LR<span class="sc">.</span>score(X_val, y_val, w)<span class="sc">.</span><span class="bu">round</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Training score = 0.4765
+Validation score = 0.4931</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>LR.w</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>array([0.56552291, 0.9650224 ])</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>LR2 <span class="op">=</span> LinearRegression()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>LR2.fit_gradient(X_train, y_train, alpha <span class="op">=</span> <span class="fl">0.01</span>, max_iter <span class="op">=</span> <span class="bu">int</span>(<span class="fl">1e2</span>))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>LR2.w</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>array([0.56592705, 0.9648127 ])</code></pre>
+</div>
+</div>
+<p>Then, I can plot the <code>score_history</code> of the gradient descent to see how the score evolved until the max iterations. By observation, the score evolved monotonically since we’re not using stochastic gradient.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>plt.plot(LR2.score_history)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> plt.gca().<span class="bu">set</span>(title <span class="op">=</span> <span class="st">"Evolution of Training Score"</span>, xlabel <span class="op">=</span> <span class="st">"Iteration"</span>, ylabel <span class="op">=</span> <span class="st">"Score"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="experiment-1-increasing-p_features-with-constant-n_train" class="level2">
+<h2 class="anchored" data-anchor-id="experiment-1-increasing-p_features-with-constant-n_train">Experiment 1: Increasing p_features with constant n_train</h2>
+<p>For this first experiment, I’ve chosen to increase the number of <code>p_features</code> to <span class="math inline">\(10\)</span>, <span class="math inline">\(50\)</span>, and then later choose the number of p_features to be <span class="math inline">\(n-1\)</span>.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">4</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>n_train <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>n_val <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>p_features <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>noise <span class="op">=</span> <span class="fl">0.2</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># create some data</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>X_train, y_train, X_val, y_val <span class="op">=</span> LR_data(n_train, n_val, p_features, noise)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use our fit_analytic method to get training and validation score</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>LR1 <span class="op">=</span> LinearRegression()</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>LR1.fit_analytic(X_train, y_train) </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> LR1.w</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>LR1_train_score <span class="op">=</span> LR1.score(X_train, y_train, w).<span class="bu">round</span>(<span class="dv">4</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>LR1_validation_score <span class="op">=</span> LR1.score(X_val, y_val, w).<span class="bu">round</span>(<span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">2</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>p_features <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>X_train, y_train, X_val, y_val <span class="op">=</span> LR_data(n_train, n_val, p_features, noise)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use our fit_analytic method to get training and validation score</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>LR2 <span class="op">=</span> LinearRegression()</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>LR2.fit_analytic(X_train, y_train) </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> LR2.w</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>LR2_train_score <span class="op">=</span> LR.score(X_train, y_train, w).<span class="bu">round</span>(<span class="dv">4</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>LR2_validation_score <span class="op">=</span> LR.score(X_val, y_val, w).<span class="bu">round</span>(<span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">3</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>p_features <span class="op">=</span> n_train <span class="op">-</span> <span class="dv">1</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>X_train, y_train, X_val, y_val <span class="op">=</span> LR_data(n_train, n_val, p_features, noise)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use our fit_analytic method to get training and validation score</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>LR3 <span class="op">=</span> LinearRegression()</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>LR3.fit_analytic(X_train, y_train) </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> LR3.w</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>LR3_train_score <span class="op">=</span> LR3.score(X_train, y_train, w).<span class="bu">round</span>(<span class="dv">4</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>LR3_validation_score <span class="op">=</span> LR3.score(X_val, y_val, w).<span class="bu">round</span>(<span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can visualize the training and validation scores to visibly observe the differences of each experiment as we increase the number of <code>p_features</code>.</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Code from https://www.geeksforgeeks.org/bar-plot-in-matplotlib/</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>bar_width <span class="op">=</span> <span class="fl">0.2</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>training_scores <span class="op">=</span> [LR1_train_score, LR2_train_score, LR3_train_score]</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>validation_scores <span class="op">=</span> [LR1_validation_score, LR2_validation_score, LR3_validation_score]</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Set position of bar on X axis</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>br1 <span class="op">=</span> np.arange(<span class="bu">len</span>(training_scores))</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>br2 <span class="op">=</span> [x <span class="op">+</span> bar_width <span class="cf">for</span> x <span class="kw">in</span> br1]</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Make the plot</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>plt.bar(br1, training_scores, width <span class="op">=</span> bar_width,</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'training score'</span>)</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>plt.bar(br2, validation_scores, width <span class="op">=</span> bar_width,</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'validation score'</span>)</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Number of p_features vs score with constant n_train'</span>)</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding Xticks</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Number of p_features'</span>, fontsize <span class="op">=</span> <span class="dv">12</span>)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Score'</span>, fontsize <span class="op">=</span> <span class="dv">12</span>)</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>plt.xticks([r <span class="op">+</span> <span class="fl">0.1</span> <span class="cf">for</span> r <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(training_scores))],</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>        [<span class="st">'10'</span>, <span class="st">'50'</span>, <span class="st">'n_train - 1'</span>])</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>legend <span class="op">=</span> plt.legend()</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-14-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>As shown on the graph above, we can see that as the number of <code>p_features</code> increases up to <code>n_train - 1</code>, the fitted model’s <code>training_score</code> also increases. However, the model’s <code>validation score</code> decreases. This conclusion is related to the model being <code>overfit</code> due to the significant difference of the training and validation score between the model with <code>n_train - 1</code> p_features. This means that we’ve trained the model exactly to some random training data given, however, when validated on the true labels, the calculated optimized weight vector <span class="math inline">\(w\)</span> will be highly inaccurate in comparison to the labels.</p>
+</section>
+<section id="experiment-2-lasso-regularization" class="level2">
+<h2 class="anchored" data-anchor-id="experiment-2-lasso-regularization">Experiment 2: LASSO Regularization</h2>
+<p>Using LASSO regularization, we modify the original loss function to add a <code>regularization term</code>:</p>
+<p><span class="math display">\[L(w) = ||Xw - y||^{2}_{2} + \alpha||w'||_{1}\]</span></p>
+<p>This extension of the regularization term minimizes the weight vector <span class="math inline">\(w\)</span> as small as it could be and forces the weight vector’s entries to be <em>exactly</em> zero.</p>
+<section id="varying-degrees-of-alpha" class="level3">
+<h3 class="anchored" data-anchor-id="varying-degrees-of-alpha">Varying Degrees of Alpha</h3>
+<p>For this experiment, we can choose varying degrees of <em>alpha</em> while increasing the number of <code>p_features</code> of our data.</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> Lasso</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alpha of 0.001</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>L1 <span class="op">=</span> Lasso(alpha <span class="op">=</span> <span class="fl">0.001</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>p_features <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit our model</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>X_train, y_train, X_val, y_val <span class="op">=</span> LR_data(n_train, n_val, p_features, noise)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>L1.fit(X_train, y_train)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>L1_validation_1 <span class="op">=</span> L1.score(X_val, y_val)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>p_features <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit our model</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>X_train, y_train, X_val, y_val <span class="op">=</span> LR_data(n_train, n_val, p_features, noise)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>L1.fit(X_train, y_train)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>L1_validation_2 <span class="op">=</span> L1.score(X_val, y_val)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>p_features <span class="op">=</span> n_train <span class="op">-</span> <span class="dv">1</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit our model</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>X_train, y_train, X_val, y_val <span class="op">=</span> LR_data(n_train, n_val, p_features, noise)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>L1.fit(X_train, y_train)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>L1_validation_3 <span class="op">=</span> L1.score(X_val, y_val)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>After fitting the Lasso model with an alpha of <span class="math inline">\(0.001\)</span>, we can plot its validation scores in contrast to the standard linear regression.</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>bar_width <span class="op">=</span> <span class="fl">0.2</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>lasso_validation <span class="op">=</span> [L1_validation_1, L1_validation_2, L1_validation_3]</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>linear_validation <span class="op">=</span> [LR1_validation_score, LR2_validation_score, LR3_validation_score]</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Set position of bar on X axis</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>br1 <span class="op">=</span> np.arange(<span class="bu">len</span>(lasso_validation))</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>br2 <span class="op">=</span> [x <span class="op">+</span> bar_width <span class="cf">for</span> x <span class="kw">in</span> br1]</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Make the plot</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>plt.bar(br2, linear_validation, width <span class="op">=</span> bar_width,</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'linear validation score'</span>)</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>plt.bar(br1, lasso_validation, width <span class="op">=</span> bar_width,</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'lasso validation score'</span>)</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Number of p_features vs Validation Scores for Lasso Regularization and Standard Linear Regression'</span>)</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding Xticks</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Number of p_features'</span>, fontsize <span class="op">=</span> <span class="dv">12</span>)</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Score'</span>, fontsize <span class="op">=</span> <span class="dv">12</span>)</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>plt.xticks([r <span class="op">+</span> <span class="fl">0.1</span> <span class="cf">for</span> r <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(lasso_validation))],</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>        [<span class="st">'10'</span>, <span class="st">'50'</span>, <span class="st">'n_train - 1'</span>])</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>legend <span class="op">=</span> plt.legend()</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-20-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alpha of 0.01</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>L2 <span class="op">=</span> Lasso(alpha <span class="op">=</span> <span class="fl">0.01</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>p_features <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit our model</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>X_train, y_train, X_val, y_val <span class="op">=</span> LR_data(n_train, n_val, p_features, noise)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>L2.fit(X_train, y_train)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>L2_validation_1 <span class="op">=</span> L2.score(X_val, y_val)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>p_features <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit our model</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>X_train, y_train, X_val, y_val <span class="op">=</span> LR_data(n_train, n_val, p_features, noise)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>L2.fit(X_train, y_train)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>L2_validation_2 <span class="op">=</span> L2.score(X_val, y_val)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>p_features <span class="op">=</span> n_train <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit our model</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>X_train, y_train, X_val, y_val <span class="op">=</span> LR_data(n_train, n_val, p_features, noise)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>L2.fit(X_train, y_train)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>L2_validation_3 <span class="op">=</span> L2.score(X_val, y_val)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>After fitting the Lasso model with an alpha of <span class="math inline">\(0.01\)</span>, we can plot its validation scores in contrast to the standard linear regression.</p>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>bar_width <span class="op">=</span> <span class="fl">0.2</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>lasso_validation <span class="op">=</span> [L2_validation_1, L2_validation_2, L2_validation_3]</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>linear_validation <span class="op">=</span> [LR1_validation_score, LR2_validation_score, LR3_validation_score]</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Set position of bar on X axis</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>br1 <span class="op">=</span> np.arange(<span class="bu">len</span>(lasso_validation))</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>br2 <span class="op">=</span> [x <span class="op">+</span> bar_width <span class="cf">for</span> x <span class="kw">in</span> br1]</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Make the plot</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>plt.bar(br2, linear_validation, width <span class="op">=</span> bar_width,</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'linear validation score'</span>)</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>plt.bar(br1, lasso_validation, width <span class="op">=</span> bar_width,</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'lasso validation score'</span>)</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Number of p_features vs Validation Scores for Lasso Regularization and Standard Linear Regression'</span>)</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding Xticks</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Number of p_features'</span>, fontsize <span class="op">=</span> <span class="dv">12</span>)</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Score'</span>, fontsize <span class="op">=</span> <span class="dv">12</span>)</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>plt.xticks([r <span class="op">+</span> <span class="fl">0.1</span> <span class="cf">for</span> r <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(lasso_validation))],</span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>        [<span class="st">'10'</span>, <span class="st">'50'</span>, <span class="st">'n_train - 1'</span>])</span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>legend <span class="op">=</span> plt.legend()</span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-25-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alpha of 0.1</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>L3 <span class="op">=</span> Lasso(alpha <span class="op">=</span> <span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>p_features <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit our model</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>X_train, y_train, X_val, y_val <span class="op">=</span> LR_data(n_train, n_val, p_features, noise)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>L3.fit(X_train, y_train)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>L3_validation_1 <span class="op">=</span> L3.score(X_val, y_val)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>p_features <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit our model</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>X_train, y_train, X_val, y_val <span class="op">=</span> LR_data(n_train, n_val, p_features, noise)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>L3.fit(X_train, y_train)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>L3_validation_2 <span class="op">=</span> L3.score(X_val, y_val)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>p_features <span class="op">=</span> n_train <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit our model</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>X_train, y_train, X_val, y_val <span class="op">=</span> LR_data(n_train, n_val, p_features, noise)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>L3.fit(X_train, y_train)</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>L3_validation_3 <span class="op">=</span> L3.score(X_val, y_val)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>After fitting the Lasso model with an alpha of <span class="math inline">\(0.1\)</span>, we can plot its validation scores in contrast to the standard linear regression.</p>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>bar_width <span class="op">=</span> <span class="fl">0.2</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>lasso_validation <span class="op">=</span> [L3_validation_1, L3_validation_2, L3_validation_3]</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>linear_validation <span class="op">=</span> [LR1_validation_score, LR2_validation_score, LR3_validation_score]</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Set position of bar on X axis</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>br1 <span class="op">=</span> np.arange(<span class="bu">len</span>(lasso_validation))</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>br2 <span class="op">=</span> [x <span class="op">+</span> bar_width <span class="cf">for</span> x <span class="kw">in</span> br1]</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Make the plot</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>plt.bar(br2, linear_validation, width <span class="op">=</span> bar_width,</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'linear validation score'</span>)</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>plt.bar(br1, lasso_validation, width <span class="op">=</span> bar_width,</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'lasso validation score'</span>)</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Number of p_features vs Validation Scores for Lasso Regularization and Standard Linear Regression'</span>)</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding Xticks</span></span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Number of p_features'</span>, fontsize <span class="op">=</span> <span class="dv">12</span>)</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Score'</span>, fontsize <span class="op">=</span> <span class="dv">12</span>)</span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>plt.xticks([r <span class="op">+</span> <span class="fl">0.1</span> <span class="cf">for</span> r <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(lasso_validation))],</span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>        [<span class="st">'10'</span>, <span class="st">'50'</span>, <span class="st">'n_train - 1'</span>])</span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>legend <span class="op">=</span> plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-30-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting all three alpha levels</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>bar_width <span class="op">=</span> <span class="fl">0.2</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>lasso_validation_1 <span class="op">=</span> [L1_validation_1, L1_validation_2, L1_validation_3]</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>lasso_validation_2 <span class="op">=</span> [L2_validation_1, L2_validation_2, L2_validation_3]</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>lasso_validation_3 <span class="op">=</span> [L3_validation_1, L3_validation_2, L3_validation_3]</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Set position of bar on X axis</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>br1 <span class="op">=</span> np.arange(<span class="bu">len</span>(lasso_validation_1))</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>br2 <span class="op">=</span> [x <span class="op">+</span> bar_width <span class="cf">for</span> x <span class="kw">in</span> br1]</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>br3 <span class="op">=</span> [x <span class="op">+</span> bar_width <span class="cf">for</span> x <span class="kw">in</span> br2]</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Make the plot</span></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>plt.bar(br1, lasso_validation_1, width <span class="op">=</span> bar_width,</span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'alpha = 0.001'</span>)</span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>plt.bar(br2, lasso_validation_2, width <span class="op">=</span> bar_width,</span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'alpha = 0.01'</span>)</span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>plt.bar(br3, lasso_validation_3, width <span class="op">=</span> bar_width,</span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>        edgecolor <span class="op">=</span><span class="st">'grey'</span>, label <span class="op">=</span><span class="st">'alpha = 0.1'</span>)</span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Number of p_features vs Validation Scores for Lasso Regularization with Varying Alpha'</span>)</span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding Xticks</span></span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Number of p_features'</span>, fontsize <span class="op">=</span> <span class="dv">12</span>)</span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Score'</span>, fontsize <span class="op">=</span> <span class="dv">12</span>)</span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>plt.xticks([r <span class="op">+</span> <span class="fl">0.1</span> <span class="cf">for</span> r <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(lasso_validation))],</span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a>        [<span class="st">'10'</span>, <span class="st">'50'</span>, <span class="st">'n_train - 1'</span>])</span>
+<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a>legend <span class="op">=</span> plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-31-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>After plotting all three degrees of alpha with increasing number of <code>p_features</code> up to <code>n_train - 1</code>, I found that smaller values of alpha (alpha = <span class="math inline">\(0.001\)</span>) will still retain a moderately high validation score despite reaching up to n_train - 1 number of p_features. However, as I increase the degree of alpha to <span class="math inline">\(0.01\)</span> and <span class="math inline">\(0.1\)</span>, the difference in validation score between LASSO regularization and standard linear regression becomes significantly different. As I increase the strength of the regularizer, the validation score for LASSO regularization approaches zero, and is no longer accuracte in predicting the true labels.</p>
+<p>In conclusion, LASSO regularization can improve a model’s validation score with smaller alpha levels in contrast to utilizing standard linear regression even with up to n_train - 1 number of p_features. However, as you increase the strength of the regularization, the validation score decreases significantly, and the model is no longer proficient in its predictions.</p>
 
+
+</section>
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

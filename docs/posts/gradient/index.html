@@ -217,7 +217,7 @@ background-size: cover;
 
 <section id="gradient-descent-algorithm" class="level1">
 <h1>Gradient Descent Algorithm</h1>
-<p>Here is the link to my source code: https://github.com/kennyerss/kennyerss.github.io/blob/main/posts/gradient/gradient.py</p>
+<p>Here is the link to my source code: <a href="https://github.com/kennyerss/kennyerss.github.io/blob/main/posts/gradient/gradient.py">Gradient Descent</a></p>
 <section id="gradient-descent-implementation" class="level2">
 <h2 class="anchored" data-anchor-id="gradient-descent-implementation">Gradient Descent Implementation</h2>
 <p>To implement gradient descent, I created a <code>gradient_empirical</code> method which would calculate the gradient of the empirical risk formula. This method uses several other methods: <code>predict</code>, and <code>loss_deriv</code>. The <code>predict</code> method is simply a way of generating our predicted <span class="math inline">\(y_{hat}\)</span> by dotting the padded feature matrix <span class="math inline">\(X\)</span> with the current weight vector <span class="math inline">\(w\)</span>. The <code>loss_deriv</code> method returns the derivative of our loss function by taking our predicted <span class="math inline">\(y_{hat}\)</span> and computing it on the <span class="math inline">\(sigmoid\)</span> function subtracted by the true label <span class="math inline">\(y\)</span> vector.</p>
@@ -230,7 +230,7 @@ background-size: cover;
 </section>
 <section id="testing-the-gradient-descent-algorithm" class="level1">
 <h1>Testing the Gradient Descent Algorithm</h1>
-<div class="cell" data-execution_count="148">
+<div class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gradient <span class="im">import</span> LogisticRegression </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_blobs</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
@@ -250,7 +250,7 @@ background-size: cover;
 <p><img src="index_files/figure-html/cell-2-output-1.png" class="img-fluid"></p>
 </div>
 </div>
-<div class="cell" data-execution_count="304">
+<div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Testing all the gradient descent evolutions</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>LR <span class="op">=</span> LogisticRegression()</span>
@@ -293,7 +293,7 @@ background-size: cover;
 <section id="experiment-1" class="level2">
 <h2 class="anchored" data-anchor-id="experiment-1">Experiment 1</h2>
 <p>For our <span class="math inline">\(\textbf{first experiment}\)</span>, we will demonstrate for when the learning rate is too large, that the gradient descent method will not converge to a minimizer. Below, I’ve generated data that is at least 10 feature dimensions for this experiment.</p>
-<div class="cell" data-execution_count="299">
+<div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> gradient <span class="im">import</span> LogisticRegression </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_blobs</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
@@ -308,7 +308,7 @@ background-size: cover;
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>X_ <span class="op">=</span> np.append(X, np.ones((X.shape[<span class="dv">0</span>], <span class="dv">1</span>)), <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="300">
+<div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Testing the gradient descent with learning rate = 88</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">901</span>)</span>
@@ -334,7 +334,7 @@ background-size: cover;
 <p><img src="index_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
 </div>
 </div>
-<div class="cell" data-execution_count="301">
+<div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Testing the gradient descent with learning rate = 89</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">901</span>)</span>
@@ -365,7 +365,7 @@ background-size: cover;
 <section id="experiment-2" class="level2">
 <h2 class="anchored" data-anchor-id="experiment-2">Experiment 2</h2>
 <p>For our <span class="math inline">\(\textbf{ second experiment}\)</span>, we will demonstrate the speed of convergence for different choices of batch size for the <code>stochastic gradient</code> algorithm.</p>
-<div class="cell" data-execution_count="310">
+<div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Experimenting stochastic gradient models with different batch sizes</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">901</span>)</span>
@@ -412,7 +412,7 @@ background-size: cover;
 <section id="experiment-3" class="level2">
 <h2 class="anchored" data-anchor-id="experiment-3">Experiment 3</h2>
 <p>For our <span class="math inline">\(\textbf{third experiment}\)</span>, we will demonstrate the case in which the use of momentum significantly speeds up convergence.</p>
-<div class="cell" data-execution_count="312">
+<div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Experimenting stochastic gradient models with and without momentum</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">901</span>)</span>
