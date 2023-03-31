@@ -37,15 +37,16 @@ class LinearRegression:
             self.w -= gradient * alpha
             
             # Compute our score and append to score_history
-            score = self.score(X, y, self.w, gradient = True)
+            score = self.score(X, y, gradient = True)
             self.score_history.append(score)
             
     # Predict function to compute y_hat
-    def predict(self, X, w):
-        return X@w
+    def predict(self, X):
+        X = self.pad(X)
+        return X@self.w
 
     # Score function
-    def score(self, X, y, w, gradient = False):
+    def score(self, X, y, gradient = False):
 
         if gradient is True:
             X = X
@@ -53,7 +54,7 @@ class LinearRegression:
             X = self.pad(X)
                         
         # Get y_hat
-        y_hat = self.predict(X,w)
+        y_hat = X @ self.w
 
         # Top sum
         top_sum = np.sum((y_hat - y)**2)

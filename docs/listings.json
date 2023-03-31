@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/audit/index.html",
       "/posts/linear-reg/index.html",
       "/posts/kernel/index.html",
       "/posts/gradient/index.html",
