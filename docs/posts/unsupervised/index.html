@@ -224,12 +224,7 @@ background-size: cover;
 <p>Utilizing SVD allows us to make <em>approximations</em> using a smaller representation of the original matrix; in turn, we can use this approximation in applications with images through image compression!</p>
 <p>Thus, in this blog post, we’ll make use of SVD to <em>compress</em> images and analyze the effect of varying values of <span class="math inline">\(k\)</span> in assessing efficient storage use for large images on computers with minimal storage.</p>
 <p>For my RGB image, I’ve chosen a scene from one of my favorite animes, <a href="https://en.wikipedia.org/wiki/One_Piece">One Piece</a>, with Luffy as the main character shown below.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://media.tenor.com/TaCxCSmzlLEAAAAM/dream-fans-dsmp.gif" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">display image</figcaption><p></p>
-</figure>
-</div>
+<p><img src="https://media.tenor.com/TaCxCSmzlLEAAAAM/dream-fans-dsmp.gif" class="img-fluid"></p>
 <div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -268,6 +263,7 @@ background-size: cover;
 </div>
 <section id="implementation" class="level2">
 <h2 class="anchored" data-anchor-id="implementation">Implementation</h2>
+<p>Here is the source code for my function <code>svd_reconstruct</code>: <a href="https://github.com/kennyerss/kennyerss.github.io/blob/main/posts/unsupervised/svd.py">SVD</a></p>
 <section id="desired-compression-factor-and-epsilon-threshold" class="level3">
 <h3 class="anchored" data-anchor-id="desired-compression-factor-and-epsilon-threshold">Desired Compression Factor and Epsilon Threshold</h3>
 <section id="desired-compression-factor" class="level4">
