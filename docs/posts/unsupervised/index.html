@@ -222,7 +222,7 @@ background-size: cover;
 <p><span class="math display">\[A = UDV^{T}\]</span></p>
 <p>where <span class="math inline">\(U\in\mathbb{R^{mxm}}\)</span> and <span class="math inline">\(V\in\mathbb{R^{nxn}}\)</span> are orthogonal matrices. The <strong>singular values</strong> of <span class="math inline">\(D\in\mathbb{R^{mxn}}\)</span> along its diagonals overall convey some measure of how big <span class="math inline">\(A\)</span> is. By manipulating the singular values of <span class="math inline">\(D\)</span>, we can reconstruct the matrix <span class="math inline">\(A\)</span> from <span class="math inline">\(U\)</span>, <span class="math inline">\(V\)</span>, and <span class="math inline">\(D\)</span>.</p>
 <p>Utilizing SVD allows us to make <em>approximations</em> using a smaller representation of the original matrix; in turn, we can use this approximation in applications with images through image compression!</p>
-<p>Thus, in this blog post, we’ll make use of SVD to <em>compress</em> images and analyze the effect of varying values of <span class="math inline">\(k\)</span> in assessing efficient storage use for large images on computers with minimal storage.</p>
+<p>Thus, in this blog post, we’ll make use of SVD to <em>compress</em> images and analyze the effect of varying singular values of <span class="math inline">\(k\)</span> in assessing efficient storage use for large images on computers with minimal storage.</p>
 <p>For my RGB image, I’ve chosen a scene from one of my favorite animes, <a href="https://en.wikipedia.org/wiki/One_Piece">One Piece</a>, with Luffy as the main character shown below.</p>
 <p><img src="https://media.tenor.com/TaCxCSmzlLEAAAAM/dream-fans-dsmp.gif" class="img-fluid"></p>
 <div class="cell" data-execution_count="5">

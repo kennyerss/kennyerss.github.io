@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/timnit-gebru/index.html",
       "/posts/unsupervised/index.html",
       "/posts/audit/index.html",
       "/posts/linear-reg/index.html",
