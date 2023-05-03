@@ -1,4 +1,5 @@
 import numpy as np
+import math
 from matplotlib import pyplot as plt
 
 class SVD:
@@ -12,11 +13,6 @@ class SVD:
         Input: Image to reconstruct and number of k singular values to use
         Output: Reconstructs image from its singular value decomposition and storage amount
         '''
-        # # Use the attributes of class if not using svd_experiment
-        # if not experiment:
-        #     k = self.k
-        #     img = self.img
-        
         # From lecture notes
         U, sigma, V = np.linalg.svd(img)
         
@@ -39,7 +35,7 @@ class SVD:
         # Calculate the number of pixels to store for reconstructed image
         storage = ((k*m) + k + (k*n)) / (m*n) * 100
 
-        return img_, storage
+        return img_, round(storage, 1)
   
     def svd_experiment(self):
         '''
@@ -50,7 +46,7 @@ class SVD:
         plt_col = 3
         
         fig, axarr = plt.subplots(plt_row, plt_col, figsize = (12,6))
- 
+        
         # Plotting each new reconstructed image onto subplot
         for i in range(plt_row):
             for j in range(plt_col):
@@ -60,8 +56,9 @@ class SVD:
                 axarr[i, j].axis("off")
                 axarr[i, j].set(title = f"{self.k} components, % storage = {storage}")
                 
-                # Adjust spacing for each subplot
-                fig.tight_layout()
-                
                 # Update k value
                 self.k += 5
+
+        # Adjust spacing for each subplot
+        plt.tight_layout()
+        plt.show()
