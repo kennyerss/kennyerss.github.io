@@ -265,7 +265,7 @@ background-size: cover;
 <p><img src="index_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
 </div>
 </div>
-<p>Now that we’ve converted our image of Luffy to a greyscaled version, we can do compute its SVD to generate a reconstructed image with lesser storage!</p>
+<p>Now that we’ve converted our image of Luffy to a greyscaled version, we can do compute its SVD to generate a reconstructed image with less storage!</p>
 <section id="svd-implementation" class="level2">
 <h2 class="anchored" data-anchor-id="svd-implementation">SVD Implementation</h2>
 <p>Here is the source code for my implementation of SVD: <a href="https://github.com/kennyerss/kennyerss.github.io/blob/main/posts/unsupervised/svd.py">SVD</a></p>
@@ -304,7 +304,7 @@ background-size: cover;
 
     return img_, round(storage, 1)
     </code></pre>
-<p>Most of the code in the <code>svd_reconstruct</code> method were taken from the assignment blog post — specifically reconstructing the image by generating the matrices <code>U</code>, <code>D</code>, and <code>V</code>. In sequential order, I took the first <span class="math inline">\(k\)</span> columns of <span class="math inline">\(U\)</span>, the top <span class="math inline">\(k\)</span> singular values of <span class="math inline">\(D\)</span>, and the first <span class="math inline">\(k\)</span> rows of <span class="math inline">\(V\)</span>. I then computed a matrix multiplication using all three matrices to reconstruct our image <code>img_</code>. Next, I’ll talk about how I calculated the storage needed to store each reconstructed image.</p>
+<p>Most of the code in the <code>svd_reconstruct</code> method were taken from the assignment blog post — specifically reconstructing the image by generating the matrices <code>U</code>, <code>D</code>, and <code>V</code>. In sequential order, I took the first <span class="math inline">\(k\)</span> columns of <span class="math inline">\(U\)</span>, the top <span class="math inline">\(k\)</span> singular values of <span class="math inline">\(D\)</span>, and the first <span class="math inline">\(k\)</span> rows of <span class="math inline">\(V\)</span>. I then computed a matrix multiplication using all three matrices to reconstruct our image <code>img_</code>. Next, I’ll talk about how I calculated the storage needed to represent each reconstructed image.</p>
 <section id="amount-of-storage-for-reconstruction" class="level4">
 <h4 class="anchored" data-anchor-id="amount-of-storage-for-reconstruction">Amount of Storage for Reconstruction</h4>
 <p>To calculate the storage needed for a reconstructed image using some <span class="math inline">\(k\)</span> components, I used the information about how each matrix <span class="math inline">\(U\)</span>, <span class="math inline">\(D\)</span>, and <span class="math inline">\(V\)</span> are “indexed” from the <span class="math inline">\(k\)</span> singular values.</p>
