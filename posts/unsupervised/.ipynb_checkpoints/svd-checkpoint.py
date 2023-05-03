@@ -3,11 +3,20 @@ from matplotlib import pyplot as plt
 
 class SVD:
     
-    def svd_reconstruct(img, k):
+    def __init__(self, img, k):
+        self.img = img
+        self.k = k
+        
+    def svd_reconstruct(self, img, k):
         '''
         Input: Image to reconstruct and number of k singular values to use
-        Output: Reconstructs image from its singular value decomposition
+        Output: Reconstructs image from its singular value decomposition and storage amount
         '''
+        # # Use the attributes of class if not using svd_experiment
+        # if not experiment:
+        #     k = self.k
+        #     img = self.img
+        
         # From lecture notes
         U, sigma, V = np.linalg.svd(img)
         
@@ -23,11 +32,36 @@ class SVD:
         
         # Reconstruct our image 
         img_ = U_ @ D_ @ V_
-        return img_
-    
-    
-    def svd_experiment(img, k):
+
+        # Get the dimensions of our img
+        m, n = img_.shape
+
+        # Calculate the number of pixels to store for reconstructed image
+        storage = ((k*m) + k + (k*n)) / (m*n) * 100
+
+        return img_, storage
+  
+    def svd_experiment(self):
         '''
-        Input: Image to 
-        Output:
+        Output: Plots out varied k singular values and its reconstructed images using SVD
         '''
+        # Initialize how many rows and columns we want the subplot axes to have
+        plt_row = 3
+        plt_col = 3
+        
+        fig, axarr = plt.subplots(plt_row, plt_col, figsize = (12,6))
+ 
+        # Plotting each new reconstructed image onto subplot
+        for i in range(plt_row):
+            for j in range(plt_col):
+                img_, storage = self.svd_reconstruct(self.img, self.k)
+                
+                axarr[i, j].imshow(img_, cmap = "Greys")
+                axarr[i, j].axis("off")
+                axarr[i, j].set(title = f"{self.k} components, % storage = {storage}")
+                
+                # Adjust spacing for each subplot
+                fig.tight_layout()
+                
+                # Update k value
+                self.k += 5
