@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/project_blogpost/project.html",
       "/posts/wrpr-final/index.html",
       "/posts/unsupervised/index.html",
       "/posts/timnit-gebru/index.html",
